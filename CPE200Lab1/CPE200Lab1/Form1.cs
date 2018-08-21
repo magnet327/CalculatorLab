@@ -13,7 +13,7 @@ namespace CPE200Lab1
     public partial class Form1 : Form
     {
         string firstOperand = null, secondOperand = null, result = null;
-        bool set1 = false, isSec = false, check = false, isAns = false, isDot = false, isRes = false;
+        bool setFirst = false, isSec = false, check = false, isDot = false, isRes = false;
         string op = null;
         public Form1()
         {
@@ -29,7 +29,7 @@ namespace CPE200Lab1
                 lblDisplay.Text = "";
                 isSec = false;
             }
-            if(set1 == true && isSec == false)
+            if(setFirst == true && isSec == false)
             {
                 lblDisplay.Text = "";
                 isSec = true;
@@ -38,11 +38,12 @@ namespace CPE200Lab1
             {
                 lblDisplay.Text += btn.Text;
             }
-            check = false; isAns = false;
+            check = false; 
         }
 
         private void btnBack_Click(object sender, EventArgs e)
         {
+            char lastChar = lblDisplay.Text[lblDisplay.Text.Length - 1];
             if (lblDisplay.Text.Length > 1)
             {
                 lblDisplay.Text = lblDisplay.Text.Remove(lblDisplay.Text.Length - 1);
@@ -50,19 +51,26 @@ namespace CPE200Lab1
             else if (lblDisplay.Text.Length == 1)
             {
                 lblDisplay.Text = "0";
+            }  
+            if (lastChar == '.')
+            {
+                isDot = false;
             }
-                
+            setFirst = false;
+            isSec = false;
+            check = false;
+            
         }
 
         private void btnDot_Click(object sender, EventArgs e)
         {
-            if (!isDot) lblDisplay.Text += ".";
-            isDot = true; set1 = false; isAns = false;
+            if (!isDot) lblDisplay.Text += '.';
+            isDot = true; setFirst = false; 
         }
 
         private void btnEqual_Click(object sender, EventArgs e)
         {
-            if (!isAns) secondOperand = lblDisplay.Text;
+            secondOperand = lblDisplay.Text;
             if (firstOperand != null && secondOperand != null)
             {
                 if (op == "1")
@@ -78,52 +86,55 @@ namespace CPE200Lab1
                     result = (float.Parse(firstOperand) / float.Parse(secondOperand)).ToString();
                 lblDisplay.Text = result;
             }
-            if (!isRes) isRes = true;
-
-            firstOperand = result; isSec = true; isDot = false; check = false; isAns = true;
+            if (!isRes) {
+                isRes = true;
+                }
+            firstOperand = result;
+            isSec = true;
+            isDot = false;
+            check = false; 
 
         }
 
         private void btnMinus_Click(object sender, EventArgs e)
         {
-            firstOperand = lblDisplay.Text;
-            if (op == null || check) { isSec = true; isDot = false; }
-            else if (!check && !isRes) btnEqual_Click(sender, e);
-            isRes = false; set1 = false; isSec = true; check = true; isAns = false;
+            checkCondition(sender, e);
             op = "1";
         }
-        private void btnPlus_Click(object sender, EventArgs e)
+
+        private void checkCondition(object sender, EventArgs e)
         {
             firstOperand = lblDisplay.Text;
-            if (op == null || check) { isSec = true; isDot = false; }
+            if (op == null || check)
+            {
+                isSec = true; isDot = false;
+            }
             else if (!check && !isRes) btnEqual_Click(sender, e);
-            set1 = false; isSec = true; check = true; isAns = false; isRes = false;
+            isRes = false; setFirst = false; isSec = true; check = true;
+        }
+
+        private void btnPlus_Click(object sender, EventArgs e)
+        {
+            checkCondition(sender, e);
             op = "2";
         }
         private void btnMultiply_Click(object sender, EventArgs e)
         {
-            firstOperand = lblDisplay.Text;
-            if (op == null || check) { isSec = true; isDot = false; }
-            else if (!check && !isRes) btnEqual_Click(sender, e);
-            isRes = false; set1 = false; isSec = true; check = true; isAns = false;
+            checkCondition(sender, e);
             op = "3";
         }
         private void btnDivide_Click(object sender, EventArgs e)
         {
-            firstOperand = lblDisplay.Text;
-            if (op == null || check) { isSec = true; isDot = false; }
-            else if (!check && !isRes) btnEqual_Click(sender, e);
-            isRes = false; set1 = false; isSec = true; check = true; isAns = false;
+            checkCondition(sender, e);
             op = "4";
         }
 
         private void btnPercent_Click(object sender, EventArgs e)
         {
-            if (!isAns)
             {
                 secondOperand = (float.Parse(firstOperand) * float.Parse(lblDisplay.Text) / 100).ToString();
                 lblDisplay.Text = secondOperand;
-                isAns = true; isSec = true;
+                isSec = true;
             }
         }
 
@@ -131,7 +142,13 @@ namespace CPE200Lab1
         private void btnClear_Click(object sender, EventArgs e)
         {
             lblDisplay.Text = "0";
-            op = null;  firstOperand = null; secondOperand = null; set1 = false; isSec = false; isAns = false; check = false; isDot = false;
+            op = null;
+            firstOperand = null;
+            secondOperand = null;
+            setFirst = false;
+            isSec = false;
+            check = false;
+            isDot = false;
         }
 
 
