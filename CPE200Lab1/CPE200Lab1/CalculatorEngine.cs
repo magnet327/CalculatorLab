@@ -16,7 +16,8 @@ namespace CPE200Lab1
 
         private bool isOperator(string str)
         {
-            switch(str) {
+            switch (str)
+            {
                 case "+":
                 case "-":
                 case "X":
@@ -30,10 +31,11 @@ namespace CPE200Lab1
         public string Process(string str)
         {
             string[] parts = str.Split(' ');
-            if(!(isNumber(parts[0]) && isOperator(parts[1]) && isNumber(parts[2])))
+            if (!(isNumber(parts[0]) && isOperator(parts[1]) && isNumber(parts[2])))
             {
                 return "E";
-            } else
+            }
+            else
             {
                 return calculate(parts[1], parts[0], parts[2], 4);
             }
@@ -64,7 +66,7 @@ namespace CPE200Lab1
 
                     }
                 case "1/x":
-                    if(operand != "0")
+                    if (operand != "0")
                     {
                         double result;
                         string[] parts;
@@ -74,7 +76,7 @@ namespace CPE200Lab1
                         // split between integer part and fractional part
                         parts = result.ToString().Split('.');
                         // if integer part length is already break max output, return error
-                        
+
                         if (parts[0].Length > maxOutputSize)
                         {
                             return "E";
@@ -112,7 +114,7 @@ namespace CPE200Lab1
                         // split between integer part and fractional part
                         parts = result.ToString().Split('.');
                         // if integer part length is already break max output, return error
-               
+
                         if (parts[0].Length > maxOutputSize)
                         {
                             return "E";
@@ -127,7 +129,7 @@ namespace CPE200Lab1
                 case "%":
                     //your code here
                     return (float.Parse(secondOperand) * float.Parse(firstOperand) / 100).ToString();
-                    
+
             }
             return "E";
         }
