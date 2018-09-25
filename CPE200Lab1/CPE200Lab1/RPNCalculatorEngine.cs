@@ -10,7 +10,6 @@ namespace CPE200Lab1
     {
         public string Process(string str)
         {
-            // your code here
             Stack<string> stack = new Stack<string>();
 
             string[] numSet = str.Split(' ');
@@ -26,7 +25,7 @@ namespace CPE200Lab1
                 {
                     if (numOP == "-" || numOP == "+" || numOP == "X" || numOP == "÷" || numOP == "%")
                     {
-                        if (stack.Count >= 2)
+                        try
                         {
                             secondOperand = stack.Peek();
                             stack.Pop();
@@ -38,7 +37,7 @@ namespace CPE200Lab1
                             }
                             stack.Push(calculate(numOP, firstOperand, secondOperand));
                         }
-                        else
+                        catch(Exception ex)
                         {
                             return "E";
                         }
@@ -46,12 +45,12 @@ namespace CPE200Lab1
 
                     else if (numOP == "√" || numOP == "1/x")
                     {
-                        if (stack.Count >= 1)
+                        try
                         {
                             string num = stack.Pop();
                             stack.Push(unaryCalculate(numOP, num));
                         }
-                        else
+                       catch(Exception ex)
                         {
                             return "E";
                         }
@@ -68,7 +67,6 @@ namespace CPE200Lab1
             {
                 return "E";
             }
-
             return stack.Peek();
         }
     }
