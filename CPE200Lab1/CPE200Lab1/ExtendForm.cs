@@ -13,15 +13,16 @@ namespace CPE200Lab1
     public partial class ExtendForm : Form
     {
         private bool isNumberPart = false;
-        private bool isContainDot = false;
+        protected bool isContainDot = false;
         private bool isSpaceAllowed = false;
-        private RPNCalculatorEngine engine;
+        protected RPNCalculatorEngine myEngine;
         public string memory = "0";
+        protected string oper;
 
         public ExtendForm()
         {
             InitializeComponent();
-            engine = new RPNCalculatorEngine();
+            myEngine = new RPNCalculatorEngine();
         }
 
         private bool isOperator(char ch)
@@ -105,7 +106,8 @@ namespace CPE200Lab1
 
         private void btnEqual_Click(object sender, EventArgs e)
         {
-            string result = engine.Process(lblDisplay.Text);
+            oper = lblDisplay.Text;
+            string result = myEngine.calculate(oper);
             if (result is "E")
             {
                 lblDisplay.Text = "Error";
@@ -176,8 +178,8 @@ namespace CPE200Lab1
         public void mFunction(object sender, EventArgs e)
         {
             string memoryBtn = ((Button)sender).Text;
-
-            if (float.TryParse((engine.Process(lblDisplay.Text)), out float f))
+            oper = lblDisplay.Text;
+            if (float.TryParse((myEngine.calculate(oper)), out float f))
             {
                 if (memoryBtn == "MC")
                 {
@@ -191,17 +193,17 @@ namespace CPE200Lab1
 
                 else if (memoryBtn == "MS")
                 {
-                    memory = engine.Process(lblDisplay.Text);
+                    memory = myEngine.calculate(oper);
                 }
 
                 else if (memoryBtn == "M+")
                 {
-                    memory = (float.Parse(memory) + float.Parse(engine.Process(lblDisplay.Text))).ToString();
+                    memory = (float.Parse(memory) + float.Parse(myEngine.calculate(oper))).ToString();
                 }
 
                 else if (memoryBtn == "M-")
                 {
-                    memory = (float.Parse(memory) - float.Parse(engine.Process(lblDisplay.Text))).ToString();
+                    memory = (float.Parse(memory) - float.Parse(myEngine.calculate(oper))).ToString();
                 }
             }
         }

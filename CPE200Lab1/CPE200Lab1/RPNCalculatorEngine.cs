@@ -8,35 +8,34 @@ namespace CPE200Lab1
 {
     public class RPNCalculatorEngine : CalculatorEngine
     {
-        public string Process(string str)
+        Stack<string> myStack = new Stack<string>();
+        public string calculate(string oper)
         {
-            // your code here
-            Stack<string> stack = new Stack<string>();
-
-            string[] numSet = str.Split(' ');
+            myStack = new Stack<string>();
+            string[] numSet = oper.Split(' ');
             string firstOperand, secondOperand;
             foreach (string numOP in numSet)
             {
                 if (isNumber(numOP))
                 {
-                    stack.Push(numOP);
+                    myStack.Push(numOP);
                 }
 
                 else
                 {
                     if (numOP == "-" || numOP == "+" || numOP == "X" || numOP == "÷" || numOP == "%")
                     {
-                        if (stack.Count >= 2)
+                        if (myStack.Count >= 2)
                         {
-                            secondOperand = stack.Peek();
-                            stack.Pop();
-                            firstOperand = stack.Peek();
-                            stack.Pop();
+                            secondOperand = myStack.Peek();
+                            myStack.Pop();
+                            firstOperand = myStack.Peek();
+                            myStack.Pop();
                             if (numOP == "%")
                             {
-                                stack.Push(firstOperand);
+                                myStack.Push(firstOperand);
                             }
-                            stack.Push(calculate(numOP, firstOperand, secondOperand));
+                            myStack.Push(calculate(numOP, firstOperand, secondOperand));
                         }
                         else
                         {
@@ -46,10 +45,10 @@ namespace CPE200Lab1
 
                     else if (numOP == "√" || numOP == "1/x")
                     {
-                        if (stack.Count >= 1)
+                        if (myStack.Count >= 1)
                         {
-                            string num = stack.Pop();
-                            stack.Push(unaryCalculate(numOP, num));
+                            string num = myStack.Pop();
+                            myStack.Push(calculate(numOP, num));
                         }
                         else
                         {
@@ -64,12 +63,12 @@ namespace CPE200Lab1
                 }
             }
 
-            if (stack.Count > 1)
+            if (myStack.Count > 1)
             {
                 return "E";
             }
 
-            return stack.Peek();
+            return myStack.Peek();
         }
     }
 }
