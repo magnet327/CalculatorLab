@@ -6,69 +6,66 @@ using System.Threading.Tasks;
 
 namespace CPE200Lab1
 {
-    public class RPNCalculatorEngine : CalculatorEngine
+    public class RPNCalculatorEngine : TheCalculatorEngine
     {
-        Stack<string> myStack = new Stack<string>();
-        public string calculate(string oper)
+        public string Process(string str)
         {
-            myStack = new Stack<string>();
-            string[] numSet = oper.Split(' ');
-            string firstOperand, secondOperand;
-            foreach (string numOP in numSet)
+            Stack<string> numbers = new Stack<string>();
+            string[] parts = str.Split(' ');
+            if (parts.Length == 1)
             {
-                if (isNumber(numOP))
+                return "E";
+            }
+            for (int i = 0; i < parts.Length; i++)
+            {
+                if (isNumber(parts[i]))
                 {
-                    myStack.Push(numOP);
+                    numbers.Push(parts[i]);
                 }
-
-                else
+                else if (thisisOperator(parts[i]))
                 {
-                    if (numOP == "-" || numOP == "+" || numOP == "X" || numOP == "÷" || numOP == "%")
-                    {
-                        if (myStack.Count >= 2)
-                        {
-                            secondOperand = myStack.Peek();
-                            myStack.Pop();
-                            firstOperand = myStack.Peek();
-                            myStack.Pop();
-                            if (numOP == "%")
-                            {
-                                myStack.Push(firstOperand);
-                            }
-                            myStack.Push(calculate(numOP, firstOperand, secondOperand));
-                        }
-                        else
-                        {
-                            return "E";
-                        }
-                    }
-
-                    else if (numOP == "√" || numOP == "1/x")
-                    {
-                        if (myStack.Count >= 1)
-                        {
-                            string num = myStack.Pop();
-                            myStack.Push(calculate(numOP, num));
-                        }
-                        else
-                        {
-                            return "E";
-                        }
-                    }
-
-                    else
+                    string first;
+                    first = numbers.Peek();
+                    numbers.Pop();
+                    numbers.Push(calculate(parts[i], first, 8));
+                }
+                else if (isModOpreator(parts[i]))
+                {
+                    string first, second;
+                    if (numbers.Count < 2)
                     {
                         return "E";
                     }
+                    second = numbers.Peek();
+                    numbers.Pop();
+                    first = numbers.Peek();
+                    numbers.Pop();
+                    numbers.Push(thismodCalculator(first, second, 8));
                 }
-            }
+                else if (isOperator(parts[i]))
+                {
+                    if (numbers.Count < 2)
+                    {
+                        return "E";
+                    }
+                    string first, second;
+                    second = numbers.Peek();
+                    numbers.Pop();
+                    first = numbers.Peek();
+                    numbers.Pop();
+                    numbers.Push(calculate(parts[i], first, second, 8));
+                }
 
-            if (myStack.Count > 1)
+            }
+            if (numbers.Count == 1)
+            {
+                return numbers.Peek();
+            }
+            else
             {
                 return "E";
             }
 
-            return myStack.Peek();
         }
     }
 }
